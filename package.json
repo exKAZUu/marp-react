@@ -28,6 +28,7 @@
     "types/"
   ],
   "scripts": {
+    "build": "npm-run-all --parallel build:* types",
     "build:cjs": "rimraf lib && tsc --module commonjs --outDir lib",
     "build:module": "rimraf module && tsc --module esnext --outDir module",
     "build:worker": "rimraf dist && webpack --mode production",

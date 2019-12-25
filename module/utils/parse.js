@@ -1,0 +1,32 @@
+import camelCase from 'camelcase';
+import { decode } from 'he';
+import htm from 'htm';
+import styleToObject from 'style-to-object';
+const decodeEntities = (v, isAttributeValue = false) => typeof v === 'string' ? decode(v, { isAttributeValue }) : v;
+const html = htm.bind((type, props, ...children) => {
+    const newProps = Object.assign({}, props);
+    // Decode HTML entities in arguments
+    Object.keys(newProps).forEach(p => {
+        newProps[p] = decodeEntities(newProps[p], true);
+    });
+    // React prefer class to className
+    if (newProps.class !== undefined) {
+        newProps.className = newProps.class;
+        delete newProps.class;
+    }
+    // Use object style instead of inline style
+    if (newProps.style !== undefined) {
+        const objStyle = {};
+        styleToObject(newProps.style, (propName, propValue) => {
+            if (propName && propValue)
+                objStyle[camelCase(propName)] = propValue;
+        });
+        newProps.style = objStyle;
+    }
+    return [type, newProps, children.map(c => decodeEntities(c))];
+});
+export default function parse(htmlStr) {
+    const lines = htmlStr.split('\n');
+    const breaks = [...Array(lines.length - 1)].map(() => '\n');
+    return html(lines, ...breaks);
+}
