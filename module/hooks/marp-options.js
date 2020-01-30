@@ -8,6 +8,6 @@ export default function useMarpOptions(opts = {}) {
     return useMemo(() => ({
         containerClass,
         identifier,
-        marpOptions: Object.assign({}, (opts || {}), { container: false, markdown: Object.assign({}, ((opts && opts.markdown) || {}), { xhtmlOut: true }), slideContainer: { tag: 'div', class: containerClass } }),
+        marpOptions: Object.assign(Object.assign({}, (opts || {})), { script: false, container: false, markdown: Object.assign(Object.assign({}, ((opts && opts.markdown) || {})), { xhtmlOut: true }), slideContainer: { tag: 'div', class: containerClass } }),
     }), [containerClass, identifier, opts]);
 }
