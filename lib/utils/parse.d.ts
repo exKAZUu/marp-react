@@ -1,5 +1,3 @@
-export default function parse(htmlStr: string): (string | {
+export default function parse(htmlStr: string): string | (string | {
     [x: string]: any;
-})[] | (string | {
-    [x: string]: any;
-})[][];
+})[];
